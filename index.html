@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Davos Events — Riverside Estate Venue</title>
+  <meta name="description" content="A private riverside estate in Woodridge, NY, showcasing the Great Lawn, River &amp; Meadow, Pool &amp; Pavilion, and Residence for weddings, retreats, and celebrations." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    .hero {
+      position: relative;
+      height: 100vh;
+      min-height: 560px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background: url('assets/photos/419 River Rd-17.jpg') center/cover no-repeat;
+      color: #fff;
+    }
+    .hero::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg, rgba(20,18,15,0.45) 0%, rgba(20,18,15,0.3) 45%, rgba(20,18,15,0.78) 100%);
+    }
+    .hero-inner { position: relative; z-index: 2; padding: 0 24px; max-width: 780px; }
+    .hero .eyebrow { color: #f1dcb8; }
+    .hero h1 {
+      font-size: clamp(2.6rem, 6.5vw, 4.6rem);
+      color: #fff;
+      margin: 14px 0 18px;
+      line-height: 1.08;
+    }
+    .hero p {
+      font-size: clamp(1rem, 1.6vw, 1.2rem);
+      color: rgba(255,255,255,0.9);
+      max-width: 560px;
+      margin: 0 auto 34px;
+    }
+    .hero-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+    .scroll-cue {
+      position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%);
+      z-index: 2; color: rgba(255,255,255,0.75); font-size: 0.72rem;
+      letter-spacing: 0.2em; text-transform: uppercase; display: flex; flex-direction: column; align-items: center; gap: 8px;
+    }
+    .scroll-cue::after {
+      content: ''; width: 1px; height: 34px; background: rgba(255,255,255,0.6);
+      animation: scrollLine 1.8s ease-in-out infinite;
+    }
+    @keyframes scrollLine { 0%{transform:scaleY(0);transform-origin:top;} 50%{transform:scaleY(1);transform-origin:top;} 51%{transform-origin:bottom;} 100%{transform:scaleY(0);transform-origin:bottom;} }
+
+    /* Intro */
+    .intro { text-align: center; max-width: 760px; margin: 0 auto; }
+    .intro p { font-size: 1.08rem; color: var(--color-charcoal); opacity: 0.85; margin-top: 18px; }
+
+    /* Space teaser grid */
+    .space-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+    .space-card {
+      position: relative;
+      border-radius: 3px;
+      overflow: hidden;
+      aspect-ratio: 3/4;
+      display: flex;
+      align-items: flex-end;
+      color: #fff;
+    }
+    .space-card img {
+      position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+      transition: transform 0.6s var(--ease);
+    }
+    .space-card::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg, rgba(20,18,15,0) 40%, rgba(20,18,15,0.82) 100%);
+    }
+    .space-card:hover img { transform: scale(1.06); }
+    .space-card-label {
+      position: relative; z-index: 2; padding: 22px;
+    }
+    .space-card-label .eyebrow { color: #f1dcb8; }
+    .space-card-label h3 { color: #fff; font-size: 1.4rem; margin-top: 6px; }
+
+    /* Stats strip */
+    .stats-strip {
+      background: var(--color-ink);
+      color: #fff;
+      padding: 56px 0;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      text-align: center;
+    }
+    .stat-num {
+      font-family: var(--font-display);
+      font-size: 2.6rem;
+      color: var(--color-gold);
+    }
+    .stat-label {
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.72);
+      margin-top: 6px;
+    }
+
+    /* Split CTA */
+    .split-cta {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: stretch;
+    }
+    .split-panel {
+      padding: 90px 60px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .split-panel.dark { background: var(--color-charcoal); color: #fff; }
+    .split-panel.light { background: var(--color-cream-dim); }
+    .split-panel h2 { font-size: clamp(1.8rem, 2.6vw, 2.3rem); margin: 10px 0 16px; }
+    .split-panel.dark h2 { color: #fff; }
+    .split-panel p { opacity: 0.85; margin-bottom: 28px; }
+    .split-panel.dark .eyebrow { color: var(--color-gold); }
+
+    @media (max-width: 900px) {
+      .space-grid { grid-template-columns: repeat(2, 1fr); }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 32px; }
+      .split-cta { grid-template-columns: 1fr; }
+      .split-panel { padding: 64px 32px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="container">
+      <a href="index.html" class="nav-logo">Davos Events</a>
+      <ul class="nav-links">
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="specifications.html">Specifications</a></li>
+      </ul>
+      <button class="nav-toggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="eyebrow">Est. Woodridge, NY</div>
+      <h1>Davos Events</h1>
+      <p>A private riverside estate where a natural stone grotto, open meadow, and quiet woodland come together — for weddings, retreats, and gatherings that deserve room to breathe.</p>
+      <div class="hero-actions">
+        <a href="gallery.html" class="btn btn-outline">Browse the Gallery</a>
+        <a href="specifications.html" class="btn btn-primary">View Specifications</a>
+      </div>
+    </div>
+    <div class="scroll-cue">Scroll</div>
+  </section>
+
+  <!-- Intro -->
+  <section class="section">
+    <div class="container intro reveal">
+      <div class="eyebrow">Welcome</div>
+      <h2 style="margin-top:10px; font-size:clamp(1.8rem,3vw,2.4rem);">Four spaces, one unforgettable setting</h2>
+      <p>Davos Events sits on a wooded riverside property at the edge of Woodridge, anchored by a natural stone grotto and falls. Beyond it, open meadow and river frontage give way to a private pool and sport court, with the residence overlooking it all — every space designed to move with your event, not against it.</p>
+    </div>
+  </section>
+
+  <!-- Explore the spaces -->
+  <section class="section section-tight" style="background:var(--color-cream-dim);">
+    <div class="container">
+      <div class="section-head center reveal">
+        <div class="eyebrow">Explore</div>
+        <h2>The Spaces</h2>
+        <p>Every room tells a different part of the story. Tap through to the full gallery for each.</p>
+      </div>
+      <div class="space-grid reveal">
+        <a class="space-card" href="gallery.html#great-lawn">
+          <img src="assets/photos/419 River Rd-17.jpg" alt="Natural stone grotto and falls framed by trees" loading="lazy" />
+          <div class="space-card-label"><div class="eyebrow">01</div><h3>The Great Lawn</h3></div>
+        </a>
+        <a class="space-card" href="gallery.html#river-meadow">
+          <img src="assets/photos/419 River Rd-12.jpg" alt="River winding through open meadow" loading="lazy" />
+          <div class="space-card-label"><div class="eyebrow">02</div><h3>River &amp; Meadow</h3></div>
+        </a>
+        <a class="space-card" href="gallery.html#pool-pavilion">
+          <img src="assets/photos/419 River Rd-8.jpg" alt="Pool and pavilion with lounge seating" loading="lazy" />
+          <div class="space-card-label"><div class="eyebrow">03</div><h3>Pool &amp; Pavilion</h3></div>
+        </a>
+        <a class="space-card" href="gallery.html#residence">
+          <img src="assets/photos/419 River Rd-21.jpg" alt="The residence exterior with deck" loading="lazy" />
+          <div class="space-card-label"><div class="eyebrow">04</div><h3>The Residence</h3></div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section class="stats-strip">
+    <div class="container stats-grid reveal">
+      <div>
+        <div class="stat-num">4</div>
+        <div class="stat-label">Signature Spaces</div>
+      </div>
+      <div>
+        <div class="stat-num">1</div>
+        <div class="stat-label">Natural Stone Falls</div>
+      </div>
+      <div>
+        <div class="stat-num">✓</div>
+        <div class="stat-label">River Frontage</div>
+      </div>
+      <div>
+        <div class="stat-num">✓</div>
+        <div class="stat-label">Private Pool &amp; Court</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Split CTA -->
+  <section class="split-cta">
+    <div class="split-panel dark reveal">
+      <div class="eyebrow">See it for yourself</div>
+      <h2>Browse the full photo gallery</h2>
+      <p>High-resolution photos of the Great Lawn, River &amp; Meadow, Pool &amp; Pavilion, and Residence — organized by space, with a full-screen lightbox view.</p>
+      <a href="gallery.html" class="btn btn-outline" style="align-self:flex-start;">Open Gallery</a>
+    </div>
+    <div class="split-panel light reveal">
+      <div class="eyebrow">Plan with confidence</div>
+      <h2 style="color:var(--color-ink);">Review capacity &amp; amenities</h2>
+      <p>Room-by-room capacity, dimensions, AV equipment, accessibility, parking, and location details — everything you need before you reach out.</p>
+      <a href="specifications.html" class="btn btn-outline-dark" style="align-self:flex-start;">View Specifications</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-col" style="max-width:280px;">
+        <div class="footer-brand">Davos Events</div>
+        <p>A private riverside estate with four signature spaces in Woodridge, NY.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Explore</h4>
+        <a href="index.html">Home</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="specifications.html">Specifications</a>
+      </div>
+      <div class="footer-col">
+        <h4>Location</h4>
+        <p>419 River Road<br />Woodridge, NY</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Davos Events. All rights reserved.</span>
+      <span>Showcase site — booking &amp; inquiries coming soon.</span>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

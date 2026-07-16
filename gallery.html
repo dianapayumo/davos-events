@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gallery — Davos Events</title>
+  <meta name="description" content="Browse photos of the Davos Events Great Lawn, River &amp; Meadow, Pool &amp; Pavilion, and Residence." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    .page-hero { background-image: url('assets/photos/419 River Rd-1.jpg'); }
+
+    /* Filter bar */
+    .filter-bar {
+      position: sticky;
+      top: 72px;
+      z-index: 100;
+      background: var(--color-cream);
+      border-bottom: 1px solid var(--color-line);
+      padding: 18px 0;
+    }
+    .filter-list {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .filter-btn {
+      padding: 9px 20px;
+      border: 1px solid var(--color-line);
+      background: transparent;
+      border-radius: 999px;
+      font-family: var(--font-body);
+      font-size: 0.8rem;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      color: var(--color-charcoal);
+      transition: all 0.25s var(--ease);
+    }
+    .filter-btn:hover { border-color: var(--color-gold); }
+    .filter-btn.active { background: var(--color-ink); border-color: var(--color-ink); color: #fff; }
+
+    .gallery-section { padding: 64px 0; border-bottom: 1px solid var(--color-line); }
+    .gallery-section:last-child { border-bottom: none; }
+
+    .gallery-section-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .gallery-section-head h2 { font-size: clamp(1.7rem, 2.6vw, 2.2rem); margin-top: 6px; }
+    .gallery-section-head p { max-width: 480px; opacity: 0.8; }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+    .gallery-grid .gallery-item:nth-child(3n+1) { grid-column: span 2; grid-row: span 2; }
+
+    .gallery-item {
+      position: relative;
+      overflow: hidden;
+      border-radius: 3px;
+      cursor: pointer;
+      aspect-ratio: 1/1;
+    }
+    .gallery-item img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform 0.5s var(--ease);
+    }
+    .gallery-item:hover img { transform: scale(1.07); }
+    .gallery-item::after {
+      content: '\2921';
+      position: absolute; top: 12px; right: 12px;
+      width: 34px; height: 34px;
+      background: rgba(20,18,15,0.55);
+      color: #fff;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.95rem;
+      opacity: 0;
+      transition: opacity 0.3s var(--ease);
+    }
+    .gallery-item:hover::after { opacity: 1; }
+
+    @media (max-width: 860px) {
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+      .gallery-grid .gallery-item:nth-child(3n+1) { grid-column: span 2; grid-row: span 1; aspect-ratio: 16/10; }
+      .filter-bar { top: 0; }
+    }
+    @media (max-width: 480px) {
+      .gallery-grid { grid-template-columns: 1fr; }
+      .gallery-grid .gallery-item:nth-child(3n+1) { grid-column: span 1; aspect-ratio: 1/1; }
+    }
+
+    /* Lightbox */
+    .lightbox {
+      position: fixed; inset: 0;
+      background: rgba(12,11,9,0.94);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s var(--ease);
+    }
+    .lightbox.open { opacity: 1; pointer-events: all; }
+    .lightbox-content {
+      max-width: 88vw; max-height: 82vh;
+      display: flex; flex-direction: column; align-items: center; gap: 14px;
+    }
+    .lightbox-content img {
+      max-width: 88vw; max-height: 72vh;
+      object-fit: contain;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+    .lightbox-caption { color: rgba(255,255,255,0.85); font-size: 0.9rem; text-align: center; }
+    .lightbox-counter { color: rgba(255,255,255,0.5); font-size: 0.78rem; letter-spacing: 0.08em; margin-top: -8px; }
+    .lightbox-close, .lightbox-nav {
+      position: absolute;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.25);
+      color: #fff;
+      width: 46px; height: 46px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem;
+      cursor: pointer;
+      transition: background 0.25s var(--ease);
+    }
+    .lightbox-close:hover, .lightbox-nav:hover { background: rgba(255,255,255,0.2); }
+    .lightbox-close { top: 24px; right: 24px; }
+    .lightbox-prev { left: 24px; top: 50%; transform: translateY(-50%); }
+    .lightbox-next { right: 24px; top: 50%; transform: translateY(-50%); }
+    @media (max-width: 700px) {
+      .lightbox-prev { left: 8px; }
+      .lightbox-next { right: 8px; }
+      .lightbox-close { top: 12px; right: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar solid">
+    <div class="container">
+      <a href="index.html" class="nav-logo">Davos Events</a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="gallery.html" class="active">Gallery</a></li>
+        <li><a href="specifications.html">Specifications</a></li>
+      </ul>
+      <button class="nav-toggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Page hero -->
+  <section class="page-hero">
+    <div class="container">
+      <div class="eyebrow">Photo Gallery</div>
+      <h1>See Davos Events</h1>
+    </div>
+  </section>
+
+  <!-- Filter bar -->
+  <div class="filter-bar">
+    <div class="container filter-list">
+      <button class="filter-btn active" data-filter="all">All Spaces</button>
+      <button class="filter-btn" data-filter="great-lawn">The Great Lawn</button>
+      <button class="filter-btn" data-filter="river-meadow">River &amp; Meadow</button>
+      <button class="filter-btn" data-filter="pool-pavilion">Pool &amp; Pavilion</button>
+      <button class="filter-btn" data-filter="residence">The Residence</button>
+    </div>
+  </div>
+
+  <!-- The Great Lawn -->
+  <section class="gallery-section" id="great-lawn" data-category="great-lawn">
+    <div class="container">
+      <div class="gallery-section-head">
+        <div>
+          <div class="eyebrow">01 &nbsp;/&nbsp; Natural Stone Falls</div>
+          <h2>The Great Lawn</h2>
+        </div>
+        <p>A natural rock outcropping and falls tucked into the woods, with an open lawn in front — a striking backdrop for a ceremony or a quiet moment.</p>
+      </div>
+      <div class="gallery-grid">
+        <div class="gallery-item"><img src="assets/photos/419 River Rd-17.jpg" data-full="assets/photos/419 River Rd-17.jpg" alt="Natural stone grotto and falls framed by trees, with lawn in front" loading="lazy" /></div>
+        <div class="gallery-item"><img src="assets/photos/419 River Rd-1.jpg" data-full="assets/photos/419 River Rd-1.jpg" alt="Aerial view of the grotto and pond nestled in the forest" loading="lazy" /></div>
+        <div class="gallery-item"><img src="assets/photos/419 River Rd-16.jpg" data-full="assets/photos/419 River Rd-16.jpg" alt="The grotto seen through mature trees across the lawn" loading="lazy" /></div>
+        <div class="gallery-item"><img src="assets/photos/419 River Rd-18.jpg" data-full="assets/photos/419 River Rd-18.jpg" alt="Angled view of the stone grotto and surrounding lawn" loading="lazy" /></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- River & Meadow -->
+  <section class="gallery-section" id="river-meadow" data-category="river-meadow">
+    <div class="container">
+      <div class="gallery-section-head">
+        <div>
+          <div class="eyebrow">02 &nbsp;/&nbsp; Open Air</div>
+          <h2>River &amp; Meadow</h2>
+        </div>
+        <p>Rolling open lawn and river frontage, framed by evergreens and a fenced meadow — room to spread out for a tent, a ceremony, or a long table.</p>
+      </div>
+      <div class="gallery-grid">
+        <div class="gallery-item"><img src="assets/photos/419 River Rd-28.jpg" data-full="assets/photos/419 River Rd-28.jpg" alt="River with small rapids along a grassy bank" loading="lazy" /></div>
+        <div class="gallery-item"><img src="assets/photos/419 River Rd-12.jpg" data-full="assets/photos/419 River Rd-12.jpg" alt="Aerial view of the river winding through open meadow" loading="lazy" /></div>
+        <div class="gallery-item"><img src="assets/photos/419 River Rd-15.jpg" data-full="assets/photos/419 River Rd-15.jpg" alt="Wide open meadow bordered by evergreen trees" loading="lazy" /></div>
+        <div class="gallery-item"><img src="assets/photos/419 River Rd-25.jpg" data-full="assets/photos/419 River Rd-25.jpg" alt="Fenced meadow and lawn bordered by forest" loading="lazy" /></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pool & Pavilion -->
+  <section class="gallery-section" id="pool-pavilion" data-category="pool-pavilion">
+    <div class="container">
+      <div class="gallery-section-head">
+        <div>
+          <div class="eyebrow">03 &nbsp;/&nbsp; Pool, Court &amp; Playground</div>
+          <h2>Pool &amp; Pavilion</h2>
+        </div>
+        <p>A private pool and patio, a covered pavilion, and a sport court set into the trees — built for a full day of celebration.</p>
+      </div>
+      <div class="gallery-grid">
+        <div class="gallery-item"><img src="assets/photos/419 River Rd-6.jpg" data-full="assets/photos/419 River Rd-6.jpg" alt="Aerial view of the residence, pool, pavilion, and sport court" loading="lazy" /></div>
+        <div class="gallery-item"><img src="assets/photos/419 River Rd-8.jpg" data-full="assets/photos/419 River Rd-8.jpg" alt="Pool and patio with lounge seating beside the pavilion" loading="lazy" /></div>
+        <div class="gallery-item"><img src="assets/photos/419 River Rd-23.jpg" data-full="assets/photos/419 River Rd-23.jpg" alt="Covered pavilion with patio seating" loading="lazy" /></div>
+        <div class="gallery-item"><img src="assets/photos/419 River Rd-22.jpg" data-full="assets/photos/419 River Rd-22.jpg" alt="Sport court set among the trees" loading="lazy" /></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- The Residence -->
+  <section class="gallery-section" id="residence" data-category="residence">
+    <div class="container">
+      <div class="gallery-section-head">
+        <div>
+          <div class="eyebrow">04 &nbsp;/&nbsp; Arrival &amp; Stay</div>
+          <h2>The Residence</h2>
+        </div>
+        <p>The main house overlooks the grounds, reached by a quiet, tree-lined drive — a comfortable base for the day.</p>
+      </div>
+      <div class="gallery-grid">
+        <div class="gallery-item"><img src="assets/photos/419 River Rd-21.jpg" data-full="assets/photos/419 River Rd-21.jpg" alt="The residence exterior with deck, viewed from the lawn" loading="lazy" /></div>
+        <div class="gallery-item"><img src="assets/photos/419 River Rd-3.jpg" data-full="assets/photos/419 River Rd-3.jpg" alt="Aerial view of the residence and driveway" loading="lazy" /></div>
+        <div class="gallery-item"><img src="assets/photos/419 River Rd-24.jpg" data-full="assets/photos/419 River Rd-24.jpg" alt="Tree-lined driveway leading to the residence" loading="lazy" /></div>
+        <div class="gallery-item"><img src="assets/photos/419 River Rd-20.jpg" data-full="assets/photos/419 River Rd-20.jpg" alt="Lawn shaded by mature trees near the residence" loading="lazy" /></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-close" id="lightbox-close" aria-label="Close">&times;</button>
+    <button class="lightbox-nav lightbox-prev" id="lightbox-prev" aria-label="Previous">&#8592;</button>
+    <button class="lightbox-nav lightbox-next" id="lightbox-next" aria-label="Next">&#8594;</button>
+    <div class="lightbox-content">
+      <img id="lightbox-img" src="" alt="" />
+      <div class="lightbox-caption" id="lightbox-caption"></div>
+      <div class="lightbox-counter" id="lightbox-counter"></div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-col" style="max-width:280px;">
+        <div class="footer-brand">Davos Events</div>
+        <p>A private riverside estate with four signature spaces in Woodridge, NY.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Explore</h4>
+        <a href="index.html">Home</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="specifications.html">Specifications</a>
+      </div>
+      <div class="footer-col">
+        <h4>Location</h4>
+        <p>419 River Road<br />Woodridge, NY</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Davos Events. All rights reserved.</span>
+      <span>Showcase site — booking &amp; inquiries coming soon.</span>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/lightbox.js"></script>
+</body>
+</html>

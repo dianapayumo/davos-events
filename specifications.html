@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Specifications — Davos Events</title>
+  <meta name="description" content="Capacity, grounds, amenities, accessibility, and location details for the Davos Events riverside estate." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    .page-hero { background-image: url('assets/photos/419 River Rd-15.jpg'); }
+
+    /* Quick jump nav */
+    .spec-jump {
+      position: sticky; top: 72px; z-index: 100;
+      background: var(--color-cream);
+      border-bottom: 1px solid var(--color-line);
+      padding: 16px 0;
+    }
+    .spec-jump-list { display: flex; gap: 28px; flex-wrap: wrap; }
+    .spec-jump-list a {
+      font-size: 0.8rem; letter-spacing: 0.06em; text-transform: uppercase;
+      font-weight: 600; color: var(--color-charcoal); opacity: 0.75;
+      transition: opacity 0.25s var(--ease), color 0.25s var(--ease);
+    }
+    .spec-jump-list a:hover { opacity: 1; color: var(--color-gold-dark); }
+
+    /* Capacity cards */
+    .capacity-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+    .capacity-card {
+      border: 1px solid var(--color-line);
+      background: #fff;
+      padding: 30px 26px;
+      border-top: 3px solid var(--color-gold);
+    }
+    .capacity-card h3 { font-size: 1.4rem; margin: 6px 0 18px; }
+    .cap-row { display: flex; justify-content: space-between; padding: 9px 0; border-bottom: 1px dashed var(--color-line); font-size: 0.92rem; }
+    .cap-row:last-child { border-bottom: none; }
+    .cap-row span:last-child { font-weight: 600; color: var(--color-ink); }
+
+    .combined-note {
+      margin-top: 28px;
+      padding: 22px 26px;
+      background: var(--color-cream-dim);
+      border-left: 3px solid var(--color-gold);
+      font-size: 0.95rem;
+    }
+    .combined-note strong { color: var(--color-ink); }
+
+    /* Dimensions table */
+    .dim-table { width: 100%; border-collapse: collapse; }
+    .dim-table th, .dim-table td {
+      text-align: left; padding: 16px 18px; border-bottom: 1px solid var(--color-line); font-size: 0.94rem;
+    }
+    .dim-table th {
+      font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-gold-dark);
+      font-weight: 600; border-bottom: 2px solid var(--color-ink);
+    }
+    .dim-table td:first-child { font-weight: 600; }
+    .dim-table-wrap { overflow-x: auto; background: #fff; border: 1px solid var(--color-line); }
+
+    /* Amenities */
+    .amenity-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--color-line);
+      border: 1px solid var(--color-line);
+    }
+    .amenity-card { background: #fff; padding: 26px 24px; }
+    .amenity-card .bar { width: 28px; height: 3px; background: var(--color-gold); margin-bottom: 14px; }
+    .amenity-card h4 { font-family: var(--font-body); font-size: 1rem; font-weight: 600; margin-bottom: 6px; }
+    .amenity-card p { font-size: 0.86rem; opacity: 0.75; margin: 0; }
+
+    /* Accessibility */
+    .access-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px 32px; }
+    .access-item { display: flex; gap: 14px; align-items: flex-start; }
+    .access-check {
+      flex: none; width: 22px; height: 22px; border-radius: 50%;
+      background: var(--color-ink); color: #fff; font-size: 0.7rem;
+      display: flex; align-items: center; justify-content: center; margin-top: 2px;
+    }
+    .access-item p { margin: 0; font-size: 0.94rem; }
+    .access-item strong { display: block; font-size: 0.98rem; margin-bottom: 2px; }
+
+    /* Location */
+    .location-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
+    .location-map {
+      aspect-ratio: 4/3;
+      background: var(--color-charcoal);
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--color-line);
+    }
+    .location-map svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .location-pin {
+      position: absolute; top: 48%; left: 52%; transform: translate(-50%,-100%);
+      width: 34px; height: 34px;
+    }
+    .location-details dl { display: grid; grid-template-columns: 120px 1fr; gap: 12px 16px; margin: 0; }
+    .location-details dt { font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-gold-dark); font-weight: 600; }
+    .location-details dd { margin: 0; font-size: 0.96rem; }
+
+    @media (max-width: 900px) {
+      .capacity-grid { grid-template-columns: repeat(2, 1fr); }
+      .amenity-grid { grid-template-columns: repeat(2, 1fr); }
+      .access-list { grid-template-columns: 1fr; }
+      .location-layout { grid-template-columns: 1fr; }
+      .spec-jump { top: 0; overflow-x: auto; }
+    }
+    @media (max-width: 560px) {
+      .capacity-grid { grid-template-columns: 1fr; }
+      .amenity-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar solid">
+    <div class="container">
+      <a href="index.html" class="nav-logo">Davos Events</a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="specifications.html" class="active">Specifications</a></li>
+      </ul>
+      <button class="nav-toggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Page hero -->
+  <section class="page-hero">
+    <div class="container">
+      <div class="eyebrow">Specifications</div>
+      <h1>Plan With Confidence</h1>
+    </div>
+  </section>
+
+  <!-- Quick jump -->
+  <nav class="spec-jump">
+    <div class="container spec-jump-list">
+      <a href="#capacity">Capacity</a>
+      <a href="#dimensions">Dimensions</a>
+      <a href="#amenities">Amenities</a>
+      <a href="#accessibility">Accessibility</a>
+      <a href="#location">Location</a>
+    </div>
+  </nav>
+
+  <!-- Capacity -->
+  <section class="section" id="capacity">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="eyebrow">Capacity</div>
+        <h2>Space by space</h2>
+        <p>Seated and reception capacities for each space. Combine spaces for larger guest counts.</p>
+      </div>
+      <div class="capacity-grid reveal">
+        <div class="capacity-card">
+          <div class="eyebrow">Natural Stone Falls</div>
+          <h3>The Great Lawn</h3>
+          <div class="cap-row"><span>Seated ceremony</span><span>100</span></div>
+          <div class="cap-row"><span>Standing / gathered</span><span>150</span></div>
+        </div>
+        <div class="capacity-card">
+          <div class="eyebrow">Open Air</div>
+          <h3>River &amp; Meadow</h3>
+          <div class="cap-row"><span>Seated, tented</span><span>150</span></div>
+          <div class="cap-row"><span>Reception / standing</span><span>200</span></div>
+        </div>
+        <div class="capacity-card">
+          <div class="eyebrow">Pool, Court &amp; Playground</div>
+          <h3>Pool &amp; Pavilion</h3>
+          <div class="cap-row"><span>Seated dinner</span><span>60</span></div>
+          <div class="cap-row"><span>Cocktail reception</span><span>100</span></div>
+        </div>
+        <div class="capacity-card">
+          <div class="eyebrow">Arrival &amp; Stay</div>
+          <h3>The Residence</h3>
+          <div class="cap-row"><span>Getting-ready suite</span><span>10</span></div>
+          <div class="cap-row"><span>Indoor gathering</span><span>25</span></div>
+        </div>
+      </div>
+      <div class="combined-note reveal">
+        <strong>Full-property use:</strong> Combining all four spaces comfortably hosts a full-day event — the Residence for arrival and getting ready, the Great Lawn for a ceremony, River &amp; Meadow for a tented reception, and the Pool &amp; Pavilion for the evening. <em>Capacity figures above are estimates pending confirmation.</em>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dimensions -->
+  <section class="section section-tight" id="dimensions" style="background:var(--color-cream-dim);">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="eyebrow">Grounds &amp; Features</div>
+        <h2>The property</h2>
+      </div>
+      <div class="dim-table-wrap reveal">
+        <table class="dim-table">
+          <thead>
+            <tr>
+              <th>Space</th>
+              <th>Setting</th>
+              <th>Surface</th>
+              <th>Cover</th>
+              <th>Natural Light</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>The Great Lawn</td>
+              <td>Wooded, natural stone falls &amp; pond</td>
+              <td>Lawn</td>
+              <td>Open, tree canopy edge</td>
+              <td>Dappled shade</td>
+            </tr>
+            <tr>
+              <td>River &amp; Meadow</td>
+              <td>Open lawn with river frontage</td>
+              <td>Mowed lawn</td>
+              <td>Open, tented option</td>
+              <td>Full daylight</td>
+            </tr>
+            <tr>
+              <td>Pool &amp; Pavilion</td>
+              <td>Pool, patio, sport court</td>
+              <td>Paved patio &amp; court</td>
+              <td>Covered pavilion available</td>
+              <td>Full daylight</td>
+            </tr>
+            <tr>
+              <td>The Residence</td>
+              <td>Two-story house with deck</td>
+              <td>Indoor</td>
+              <td>Fully enclosed</td>
+              <td>Large windows</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Amenities -->
+  <section class="section" id="amenities">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="eyebrow">Amenities</div>
+        <h2>What's included</h2>
+        <p>Every booking includes access to the following building amenities and equipment.</p>
+      </div>
+      <div class="amenity-grid reveal">
+        <div class="amenity-card"><div class="bar"></div><h4>On-Site Parking</h4><p>Private paved driveway with ample parking at the River Road entrance.</p></div>
+        <div class="amenity-card"><div class="bar"></div><h4>Private Pool</h4><p>In-ground pool with surrounding patio, steps from the pavilion.</p></div>
+        <div class="amenity-card"><div class="bar"></div><h4>Sport Court</h4><p>Fenced multi-use court set among mature trees.</p></div>
+        <div class="amenity-card"><div class="bar"></div><h4>Natural Stone Grotto</h4><p>A rock outcropping and falls with a viewing rail above and open lawn below.</p></div>
+        <div class="amenity-card"><div class="bar"></div><h4>River Frontage</h4><p>Open riverbank with room for seating along the water's edge.</p></div>
+        <div class="amenity-card"><div class="bar"></div><h4>Covered Pavilion</h4><p>Shaded outdoor structure adjoining the pool patio.</p></div>
+        <div class="amenity-card"><div class="bar"></div><h4>The Residence</h4><p>A two-story house on-site for getting ready or indoor gathering space.</p></div>
+        <div class="amenity-card"><div class="bar"></div><h4>Open Meadow</h4><p>Fenced lawn suitable for a tent, ceremony seating, or lawn games.</p></div>
+        <div class="amenity-card"><div class="bar"></div><h4>Wooded Privacy</h4><p>The property is bordered by forest on all sides, screening it from neighbors.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Accessibility -->
+  <section class="section section-tight" id="accessibility" style="background:var(--color-cream-dim);">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="eyebrow">Accessibility</div>
+        <h2>Accessible by design</h2>
+      </div>
+      <div class="access-list reveal">
+        <div class="access-item">
+          <div class="access-check">&#10003;</div>
+          <p><strong>Paved driveway</strong>Level, paved access from River Road to the residence and parking area.</p>
+        </div>
+        <div class="access-item">
+          <div class="access-check">&#10003;</div>
+          <p><strong>Level lawn areas</strong>The Pool &amp; Pavilion and much of the Residence lawn are flat and mowed.</p>
+        </div>
+        <div class="access-item">
+          <div class="access-check">&#10003;</div>
+          <p><strong>Ground-floor residence access</strong>The residence's main level is reachable without stairs from the patio.</p>
+        </div>
+        <div class="access-item">
+          <div class="access-check">&#10003;</div>
+          <p><strong>On-site parking near entry points</strong>Driveway parking sits close to both the residence and the pool patio.</p>
+        </div>
+        <div class="access-item">
+          <div class="access-check">!</div>
+          <p><strong>Natural terrain at the Great Lawn &amp; Meadow</strong>These areas involve uneven lawn and a wooded path; accessibility should be confirmed for individual needs.</p>
+        </div>
+      </div>
+      <p style="margin-top:20px; font-size:0.85rem; opacity:0.65;">Accessibility details above are general notes, not a formal ADA assessment — please confirm specific needs with us directly.</p>
+    </div>
+  </section>
+
+  <!-- Location -->
+  <section class="section" id="location">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="eyebrow">Location</div>
+        <h2>Find us</h2>
+      </div>
+      <div class="location-layout reveal">
+        <div class="location-map" aria-hidden="true">
+          <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice">
+            <rect width="400" height="300" fill="#2b2925" />
+            <g stroke="#4a463e" stroke-width="2">
+              <line x1="0" y1="60" x2="400" y2="60" />
+              <line x1="0" y1="150" x2="400" y2="150" />
+              <line x1="0" y1="230" x2="400" y2="230" />
+              <line x1="90" y1="0" x2="90" y2="300" />
+              <line x1="210" y1="0" x2="210" y2="300" />
+              <line x1="320" y1="0" x2="320" y2="300" />
+            </g>
+            <circle cx="210" cy="150" r="9" fill="#b8925a" />
+            <circle cx="210" cy="150" r="16" fill="none" stroke="#b8925a" stroke-width="2" opacity="0.5" />
+          </svg>
+        </div>
+        <div class="location-details">
+          <dl>
+            <dt>Address</dt>
+            <dd>419 River Road<br />Woodridge, NY</dd>
+            <dt>Region</dt>
+            <dd>The Catskills, Sullivan County — a wooded, private setting along the river.</dd>
+            <dt>Parking</dt>
+            <dd>On-site driveway parking for guests.</dd>
+            <dt>Setting</dt>
+            <dd>Bordered by forest on all sides for a quiet, secluded feel.</dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-col" style="max-width:280px;">
+        <div class="footer-brand">Davos Events</div>
+        <p>A private riverside estate with four signature spaces in Woodridge, NY.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Explore</h4>
+        <a href="index.html">Home</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="specifications.html">Specifications</a>
+      </div>
+      <div class="footer-col">
+        <h4>Location</h4>
+        <p>419 River Road<br />Woodridge, NY</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Davos Events. All rights reserved.</span>
+      <span>Showcase site — booking &amp; inquiries coming soon.</span>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
